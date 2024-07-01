@@ -1,28 +1,17 @@
-const City = require('../models/cityModel');
-const Cop = require('../models/copModel');
-const Vehicle = require('../models/vehicleModel');
+const {getCities} = require('./dataService')
 
-const findFugitive = (citySelections, vehicleSelections) => {
-    const fugitiveCity = "Shekharvati"; // Assume fugitive is in Shekharvati for simulation
-    let result = 'No cop found the fugitive.';
-
-    for (let copName in citySelections) {
-        const city = new City(citySelections[copName].name, citySelections[copName].distance);
-        const vehicle = new Vehicle(vehicleSelections[copName].kind, vehicleSelections[copName].range);
-        const cop = new Cop(copName);
-
-        cop.selectCity(city);
-        cop.selectVehicle(vehicle);
-
-        
-
-        if (cop.selectedCity.name === fugitiveCity) {
-            result = `${cop.name} found the fugitive in ${fugitiveCity}!`;
-            break;
-        }
-    }
-
-    return result;
+const findFugitive = (selections) => {
+    const numberOfCities  = getCities().length;
+    const fugitiveCity = getRandomNumber(numberOfCities);
+    console.log(fugitiveCity)
+    let result = Object.keys(selections).find(item => {
+        return selections[item].city.id === fugitiveCity
+    })
+    return result
 };
+
+function getRandomNumber(max) {
+    return Math.floor(Math.random() * max) + 1;
+  }
 
 module.exports = { findFugitive };

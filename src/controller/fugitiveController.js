@@ -1,22 +1,10 @@
 const asyncHandler = require('express-async-handler');
+const {findFugitive: findFugitiveService} = require('../services/fugitiveServices')
 
 const findFugitive = asyncHandler(async (req, res) => {
-    const { citySelections, vehicleSelections } = req.body;
-
-    const fugitiveCity = "Shekharvati"; // Assume fugitive is in Shekharvati for simulation
-    let result = 'No cop found the fugitive.';
-    for (let copName in citySelections) {
-        // const city = citySelections[copName].name, citySelections[copName].distance;
-        const cop = copName;
-        cop.selectCity(city);
-
-        if (cop.selectedCity.name === fugitiveCity) {
-            result = `${cop.name} found the fugitive in ${fugitiveCity}!`;
-            break;
-        }
-    }
-
-    res.status(200).json({ message: result });
+    const { selections } = req.body;
+    const result = findFugitiveService(selections);    
+    res.status(200).json(result);
 });
 
 module.exports = { findFugitive };
